@@ -2,7 +2,7 @@
 <html>
 <head>
 
-	<title>Movie Database</title>
+	<title>FMDB.com</title>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="style.css">
 	<script src="jquery.min.js"></script>
@@ -11,15 +11,15 @@
 </head>
 <body>
 	<div id="page-wrapper">
-		<h1>Freddy's Movie Data Base</h1>
+		<h1>Freddy's Movie Database</h1>
 		<div id="search-wrapper">
 			<form id="movie-search-form" type="">
 				<input id="search-bar" type="text" placeholder="Search for a movie...">
 				<select name="search-category" id="search-category">
-					<option cat="movie">Movie</option>
-					<option cat="tv">TV</option>
-					<option cat="person">Person</option>
-					<option cat="multi">Multi</option>
+					<option value="movie">Movie</option>
+					<option value="tv">TV</option>
+					<option value="person">Actor</option>
+					<option value="multi">All</option>
 				</select>
 				<button id="search-button" type="submit">Search</button>
 			</form>

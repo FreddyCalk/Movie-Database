@@ -22,39 +22,39 @@ $(document).ready(function(){
       $.getJSON(searchURL, function(search){
          $('#poster-wrapper').empty();
          searchArray = search.results;
-         console.log(searchArray)
+         console.log(searchArray);
          for(i=0;i<searchArray.length;i++){
+            var mediaType = searchArray[i].media_type;
+            var posterPath = searchArray[i].poster_path;
             var isAdult = searchArray[i].adult;
             var backdrop_path = searchArray[i].backdrop_path;
             var genreIds = searchArray[i].genre_ids;
             var movieId = searchArray[i].id;  
             var overview = searchArray[i].overview;
             var popularity = searchArray[i].popularity;
-            var posterPath = searchArray[i].poster_path;
             var releaseDate = searchArray[i].release_date;
             var voteAverage = searchArray[i].vote_average;
             var voteCount = searchArray[i].vote_count;
-            if(category === 'tv'){
+            if((category === 'tv')||(mediaType === 'tv')){
                var title = searchArray[i].original_name+" - ";
-            }else if(category === 'movie'){
+            }else if((category === 'movie')||(mediaType === 'movie')){
                title = searchArray[i].title+" - ";
-            }else if(category === 'person'){
+            }else if((category === 'person')||(mediaType === 'person')){
                posterPath = searchArray[i].profile_path;
                title = searchArray[i].name;
                overview = '';
             }
-         var html1 = '<div class="poster">';
-                html1 += '<img title="'+title+overview+'" alt="'+title+'" src="'+basePath+posterSize+posterPath+'">'
-             html1 += '</div>';
-         $('h2').text('Search Results');
-         $('#poster-wrapper').append(html1);         
-      }
-      })
-      
-   })
+            var html1 = '<div class="poster" id="'+title+'">';
+                   html1 += '<img title="'+title+overview+'" alt="'+title+'" src="'+basePath+posterSize+posterPath+'">'
+                html1 += '</div>';
 
+            $('h2').text('Search Results');
 
-
+               $('#poster-wrapper').append(html1);         
+         };
+            clickable();
+      });  
+   });
 
    $.getJSON(siteConfig, function(movie){
       // Gathering the data from the database.
@@ -80,10 +80,21 @@ $(document).ready(function(){
          var releaseDate = movieArray[i].release_date;
          var voteAverage = movieArray[i].vote_average;
          var voteCount = movieArray[i].vote_count;         
-         var html = '<div class="poster">';
+         var html = '<div class="poster" id="'+movieTitle+'">';
                 html += '<img title="'+movieTitle+' - '+overview+'" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
              html += '</div>';
-         $('#poster-wrapper').append(html);
+         
+            $('#poster-wrapper').append(html);
+            clickable();
       }
    })
+var clickable = function(){
+   // $('.poster').click(function(){
+   //    $('#poster-wrapper').empty();
+   
+
+   // })
+}
+
 })
+
