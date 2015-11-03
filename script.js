@@ -5,11 +5,57 @@ var logoSizes = '';
 var posterSize = '';
 var profileSizes = '';
 var movieArray = [];
-
-var siteConfig = 'https://api.themoviedb.org/3/configuration?api_key='+apiKey;
-var nowPlaying = 'http://api.themoviedb.org/3/movie/now_playing?api_key='+apiKey;
+var searchArray= [];
+var searchQuery = '';
 
 $(document).ready(function(){
+   $('#search-category').selectmenu();
+   
+   var siteConfig = 'http://api.themoviedb.org/3/configuration?api_key='+apiKey;
+   var nowPlaying = 'http://api.themoviedb.org/3/movie/now_playing?api_key='+apiKey;
+   
+   $('#movie-search-form').submit(function(){
+      event.preventDefault();
+      var searchQuery = $('#search-bar').val().toLowerCase();
+      var category = $('#search-category').val().toLowerCase();
+      var searchURL = 'http://api.themoviedb.org/3/search/'+category+'?query='+searchQuery+'&api_key='+apiKey;
+      $.getJSON(searchURL, function(search){
+         $('#poster-wrapper').empty();
+         searchArray = search.results;
+         console.log(searchArray)
+         for(i=0;i<searchArray.length;i++){
+            var isAdult = searchArray[i].adult;
+            var backdrop_path = searchArray[i].backdrop_path;
+            var genreIds = searchArray[i].genre_ids;
+            var movieId = searchArray[i].id;  
+            var overview = searchArray[i].overview;
+            var popularity = searchArray[i].popularity;
+            var posterPath = searchArray[i].poster_path;
+            var releaseDate = searchArray[i].release_date;
+            var voteAverage = searchArray[i].vote_average;
+            var voteCount = searchArray[i].vote_count;
+            if(category === 'tv'){
+               var title = searchArray[i].original_name+" - ";
+            }else if(category === 'movie'){
+               title = searchArray[i].title+" - ";
+            }else if(category === 'person'){
+               posterPath = searchArray[i].profile_path;
+               title = searchArray[i].name;
+               overview = '';
+            }
+         var html1 = '<div class="poster">';
+                html1 += '<img title="'+title+overview+'" alt="'+title+'" src="'+basePath+posterSize+posterPath+'">'
+             html1 += '</div>';
+         $('h2').text('Search Results');
+         $('#poster-wrapper').append(html1);         
+      }
+      })
+      
+   })
+
+
+
+
    $.getJSON(siteConfig, function(movie){
       // Gathering the data from the database.
       basePath = movie.images.base_url;
@@ -21,10 +67,8 @@ $(document).ready(function(){
    });
    $.getJSON(nowPlaying, function(movie){
       var html = '';
-      var x = 0;
       movieArray = movie.results;
       for(i=0;i<movieArray.length;i++){
-         x++;
          var isAdult = movieArray[i].adult;
          var backdrop_path = movieArray[i].backdrop_path;
          var genreIds = movieArray[i].genre_ids;
@@ -37,7 +81,7 @@ $(document).ready(function(){
          var voteAverage = movieArray[i].vote_average;
          var voteCount = movieArray[i].vote_count;         
          var html = '<div class="poster">';
-                html += '<img title="'+movieTitle+': '+overview+'" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
+                html += '<img title="'+movieTitle+' - '+overview+'" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
              html += '</div>';
          $('#poster-wrapper').append(html);
       }

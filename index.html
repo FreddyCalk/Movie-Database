@@ -11,12 +11,22 @@
 </head>
 <body>
 	<div id="page-wrapper">
+		<h1>Freddy's Movie Data Base</h1>
 		<div id="search-wrapper">
-			<input id="search-bar" type="text" placeholder="Search for a movie...">
-			<input id="search-button" type="button" value="Search">
+			<form id="movie-search-form" type="">
+				<input id="search-bar" type="text" placeholder="Search for a movie...">
+				<select name="search-category" id="search-category">
+					<option cat="movie">Movie</option>
+					<option cat="tv">TV</option>
+					<option cat="person">Person</option>
+					<option cat="multi">Multi</option>
+				</select>
+				<button id="search-button" type="submit">Search</button>
+			</form>
 		</div>
+		<h2>Now Playing</h2>
 		<div id="poster-wrapper">
-			<h2>Now Playing</h2>
+			
 
 		</div>
 	</div>
