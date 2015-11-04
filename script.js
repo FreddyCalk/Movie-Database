@@ -7,6 +7,7 @@ var profileSizes = '';
 var movieArray = [];
 var searchArray= [];
 var searchQuery = '';
+var currData = [];
 
 $(document).ready(function(){
    $('#search-category').selectmenu();
@@ -35,6 +36,9 @@ $(document).ready(function(){
             var releaseDate = searchArray[i].release_date;
             var voteAverage = searchArray[i].vote_average;
             var voteCount = searchArray[i].vote_count;
+            
+            currData[movieId] = searchArray[i]
+            
             if((category === 'tv')||(mediaType === 'tv')){
                var title = searchArray[i].original_name+" - ";
             }else if((category === 'movie')||(mediaType === 'movie')){
@@ -44,7 +48,7 @@ $(document).ready(function(){
                title = searchArray[i].name;
                overview = '';
             }
-            var html1 = '<div class="poster" id="'+title+'">';
+            var html1 = '<div class="poster" id="'+movieId+'">';
                    html1 += '<img title="'+title+overview+'" alt="'+title+'" src="'+basePath+posterSize+posterPath+'">'
                 html1 += '</div>';
 
@@ -63,14 +67,15 @@ $(document).ready(function(){
       posterSize = 'w300';
       logoSizes = logoSizes['original'];
       profileSizes = profileSizes['original'];
-
+      console.log(basePath)
    });
    $.getJSON(nowPlaying, function(movie){
       var html = '';
       movieArray = movie.results;
       for(i=0;i<movieArray.length;i++){
+         
          var isAdult = movieArray[i].adult;
-         var backdrop_path = movieArray[i].backdrop_path;
+         var backdropPath = movieArray[i].backdrop_path;
          var genreIds = movieArray[i].genre_ids;
          var movieId = movieArray[i].id;
          var movieTitle = movieArray[i].title;
@@ -79,21 +84,51 @@ $(document).ready(function(){
          var posterPath = movieArray[i].poster_path;
          var releaseDate = movieArray[i].release_date;
          var voteAverage = movieArray[i].vote_average;
-         var voteCount = movieArray[i].vote_count;         
-         var html = '<div class="poster" id="'+movieTitle+'">';
-                html += '<img title="'+movieTitle+' - '+overview+'" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
+         var voteCount = movieArray[i].vote_count;
+
+         currData[movieId] = movieArray[i];
+         
+         var html = '<div class="poster" id="'+movieId+'">';
+                html += '<img title="'+movieTitle+' - '+overview+'" image="'+basePath+posterSize+backdropPath
+                html += '" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
              html += '</div>';
+
          
             $('#poster-wrapper').append(html);
-            clickable();
+            
       }
+      clickable();
+
    })
 var clickable = function(){
-   // $('.poster').click(function(){
-   //    $('#poster-wrapper').empty();
-   
+   $('.poster').click(function(){
+      $('#poster-wrapper').empty();
+      
+      var identifier = $(this).attr('id');
+      var title = currData[identifier].title;
+      var overview = currData[identifier].overview;
+      var backdrop = currData[identifier].backdrop_path
+      var imagePath = basePath+posterSize+backdrop;
+         console.log(imagePath)
+      $('h2').html(title)      
+      console.log(currData[identifier])
+      var html3 = '<div id="backdrop">'
+            html3 += '<img src="'+imagePath+'"></div>'
+            html3 += '<div id ="overview"><p></p></div>'
+      console.log(html3)
 
-   // })
+      $('#poster-wrapper').append(html3)
+            $('p').text(overview)
+
+
+// <div id="backdrop">
+//             <img src="http://image.tmdb.org/t/p/w300/sEgULSEnywgdSesVHFHpPAbOijl.jpg">
+//          </div>
+//          <div id="overview">
+//             <p>This is what this movie is all about and what its called</p>
+//          </div>
+
+   })
 }
 
 })
