@@ -113,7 +113,6 @@ var clickable = function(){
          var movie1 = data.known_for[0];
          var movie2 = data.known_for[1];
          var movie3 = data.known_for[2];
-         console.log(movie1);
       }
       var imagePath = basePath+posterSize+backdrop;
       $('h2').text(title);
