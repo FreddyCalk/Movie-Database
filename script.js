@@ -23,7 +23,6 @@ $(document).ready(function(){
       $.getJSON(searchURL, function(search){
          $('#poster-wrapper').empty();
          searchArray = search.results;
-         console.log(searchArray);
          for(i=0;i<searchArray.length;i++){
             var mediaType = searchArray[i].media_type;
             var posterPath = searchArray[i].poster_path;
@@ -67,14 +66,12 @@ $(document).ready(function(){
       posterSize = 'w300';
       logoSizes = logoSizes['original'];
       profileSizes = profileSizes['original'];
-      console.log(basePath)
    });
    $.getJSON(nowPlaying, function(movie){
       var html = '';
       movieArray = movie.results;
       for(i=0;i<movieArray.length;i++){
          
-         var isAdult = movieArray[i].adult;
          var backdropPath = movieArray[i].backdrop_path;
          var genreIds = movieArray[i].genre_ids;
          var movieId = movieArray[i].id;
@@ -103,30 +100,43 @@ $(document).ready(function(){
 var clickable = function(){
    $('.poster').click(function(){
       $('#poster-wrapper').empty();
-      
+      var isPerson = false;
       var identifier = $(this).attr('id');
-      var title = currData[identifier].title;
-      var overview = currData[identifier].overview;
-      var backdrop = currData[identifier].backdrop_path
+      var data = currData[identifier];
+      var title = data.title;
+      var overview = data.overview;
+      var backdrop = data.backdrop_path;
+      if(backdrop == null){
+         isPerson = true;
+         backdrop = data.profile_path;
+         title = data.name;
+         var movie1 = data.known_for[0];
+         var movie2 = data.known_for[1];
+         var movie3 = data.known_for[2];
+         console.log(movie1);
+      }
       var imagePath = basePath+posterSize+backdrop;
-         console.log(imagePath)
-      $('h2').html(title)      
-      console.log(currData[identifier])
-      var html3 = '<div id="backdrop">'
-            html3 += '<img src="'+imagePath+'"></div>'
-            html3 += '<div id ="overview"><p></p></div>'
-      console.log(html3)
+      $('h2').text(title);
+      var html3 = '<div id="backdrop">';
+            html3 += '<img src="'+imagePath+'"></div>';
+            html3 += '<div id ="overview"><p></p></div>';
+      if(isPerson){
+         var movie1url = basePath+posterSize+movie1.poster_path;
+         var movie2url = basePath+posterSize+movie2.poster_path;
+         var movie3url = basePath+posterSize+movie3.poster_path;
+            html3 += '<h3>Known For</h3>';
+            html3 += '<div id = "known-for"><div><img class="actorPageVideoPic" src="'+movie1url+'">';
+            html3 += '<img class="actorPageVideoPic" src="'+movie2url+'">';
+            html3 += '<img class="actorPageVideoPic" src="'+movie3url+'"></div>';
+            html3 += '<p class="actorPageVideoPic">'+movie1.original_title+' ('+movie1.release_date.slice(0,4)+')</p>';
+            html3 += '<p class="actorPageVideoPic">'+movie2.original_title+' ('+movie2.release_date.slice(0,4)+')</p>'
+            html3 += '<p class="actorPageVideoPic">'+movie3.original_title+' ('+movie3.release_date.slice(0,4)+')</p>';
 
-      $('#poster-wrapper').append(html3)
-            $('p').text(overview)
+      }
 
 
-// <div id="backdrop">
-//             <img src="http://image.tmdb.org/t/p/w300/sEgULSEnywgdSesVHFHpPAbOijl.jpg">
-//          </div>
-//          <div id="overview">
-//             <p>This is what this movie is all about and what its called</p>
-//          </div>
+      $('#poster-wrapper').append(html3);
+      $('p').text(overview);
 
    })
 }
