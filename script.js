@@ -26,6 +26,7 @@ $(document).ready(function(){
          for(i=0;i<searchArray.length;i++){
             var mediaType = searchArray[i].media_type;
             var posterPath = searchArray[i].poster_path;
+
             var isAdult = searchArray[i].adult;
             var backdrop_path = searchArray[i].backdrop_path;
             var genreIds = searchArray[i].genre_ids;
@@ -47,8 +48,14 @@ $(document).ready(function(){
                title = searchArray[i].name;
                overview = '';
             }
+            var imageSource = basePath+posterSize+posterPath
+            if(posterPath == null){
+               imageSource = 'http://cdn8.staztic.com/app/a/1221/1221023/im-not-available-right-now-1-1-s-307x512.jpg';
+            }
+
+
             var html1 = '<div class="poster" id="'+movieId+'">';
-                   html1 += '<img title="'+title+overview+'" alt="'+title+'" src="'+basePath+posterSize+posterPath+'">'
+                   html1 += '<img title="'+title+overview+'" alt="'+title+'" src='+imageSource+'>'
                 html1 += '</div>';
 
             $('h2').text('Search Results');
@@ -84,10 +91,20 @@ $(document).ready(function(){
          var voteCount = movieArray[i].vote_count;
 
          currData[movieId] = movieArray[i];
+
+         var imageSource = basePath+posterSize+posterPath;
+         if(posterPath == null){
+            imageSource = 'http://cdn8.staztic.com/app/a/1221/1221023/im-not-available-right-now-1-1-s-307x512.jpg';
+         }
+         var backdropSource = basePath+posterSize+backdropPath;
+         if(backdropPath == null){
+            backdropSource = 'http://www.allmystery.de/dateien/60808,1298758641,NotAvailable.jpg';
+
+         }
          
          var html = '<div class="poster" id="'+movieId+'">';
                 html += '<img title="'+movieTitle+' - '+overview+'" image="'+basePath+posterSize+backdropPath
-                html += '" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
+                html += '" alt="'+movieTitle+'" src="'+imageSource+'">'
              html += '</div>';
 
          
@@ -100,13 +117,14 @@ $(document).ready(function(){
 var clickable = function(){
    $('.poster').click(function(){
       $('#poster-wrapper').empty();
+      console.log($(this));
       var isPerson = false;
       var identifier = $(this).attr('id');
       var data = currData[identifier];
       var title = data.title;
       var overview = data.overview;
       var backdrop = data.backdrop_path;
-      if(backdrop == null){
+      if((backdrop == null)&&(data.known_for)){
          isPerson = true;
          backdrop = data.profile_path;
          title = data.name;
@@ -114,7 +132,11 @@ var clickable = function(){
          var movie2 = data.known_for[1];
          var movie3 = data.known_for[2];
       }
-      var imagePath = basePath+posterSize+backdrop;
+         var imagePath = basePath+posterSize+backdrop;
+      if(backdrop == null){
+         var imagePath = 'http://www.allmystery.de/dateien/60808,1298758641,NotAvailable.jpg';
+      }
+      
       $('h2').text(title);
       var html3 = '<div id="backdrop">';
             html3 += '<img src="'+imagePath+'"></div>';
@@ -139,6 +161,35 @@ var clickable = function(){
 
    })
 }
+   $('#home-button').click(function(){
+      var html = '';
+      $('#search-wrapper').empty();
+      for(i=0;i<movieArray.length;i++){
+         
+         backdropPath = movieArray[i].backdrop_path;
+         genreIds = movieArray[i].genre_ids;
+         movieId = movieArray[i].id;
+         movieTitle = movieArray[i].title;
+         overview = movieArray[i].overview;
+         popularity = movieArray[i].popularity;
+         posterPath = movieArray[i].poster_path;
+         releaseDate = movieArray[i].release_date;
+         voteAverage = movieArray[i].vote_average;
+         voteCount = movieArray[i].vote_count;
+
+         currData[movieId] = movieArray[i];
+         
+         var html = '<div class="poster" id="'+movieId+'">';
+                html += '<img title="'+movieTitle+' - '+overview+'" image="'+basePath+posterSize+backdropPath
+                html += '" alt="'+movieTitle+'" src="'+basePath+posterSize+posterPath+'">'
+             html += '</div>';
+
+         
+            $('#poster-wrapper').append(html);
+            
+      }
+      clickable();
+   })
 
 })
 

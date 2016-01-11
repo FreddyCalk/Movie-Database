@@ -13,7 +13,7 @@
 	margin:auto;
 	text-align:center;
 }
-#search-wrapper #search-bar, #search-wrapper #search-button, #search-wrapper #search-category{
+#search-wrapper #search-bar, #search-wrapper #search-button, #search-wrapper #search-category, #search-wrapper #home-button{
 	display:block;
 	width:20%;
 	margin:1% auto;
@@ -21,14 +21,23 @@
 #search-wrapper #search-bar{
 	font-size:16px;
 }
-#search-wrapper #search-button{
+#search-wrapper #search-button, #search-wrapper #home-button{
 	color:white;
 	font-size: 20px;
 	padding:1% 0%;
-	background-color: red;
-	border: 3px solid #ccc;
+	background-color: #0f0;
+	border:0px solid #ccc;
 	border-radius: 15px;
 	cursor: pointer;
+}
+#search-wrapper #home-button{
+	background-color: #00f;
+}
+#search-wrapper #home-button:hover{
+	background-color: #00a;
+}
+#search-wrapper #search-button:hover{
+	background-color: #0a0;
 }
 #poster-wrapper{
 	overflow: hidden;
