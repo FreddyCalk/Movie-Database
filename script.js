@@ -23,10 +23,10 @@ $(document).ready(function(){
       $.getJSON(searchURL, function(search){
          $('#poster-wrapper').empty();
          searchArray = search.results;
+         var html1 = '';
          for(i=0;i<searchArray.length;i++){
             var mediaType = searchArray[i].media_type;
             var posterPath = searchArray[i].poster_path;
-
             var isAdult = searchArray[i].adult;
             var backdrop_path = searchArray[i].backdrop_path;
             var genreIds = searchArray[i].genre_ids;
@@ -52,16 +52,23 @@ $(document).ready(function(){
             if(posterPath == null){
                imageSource = 'http://cdn8.staztic.com/app/a/1221/1221023/im-not-available-right-now-1-1-s-307x512.jpg';
             }
+            if(i%4 == 0){
+               html1 += '<div class="row">';
+            }
 
+               html1 += '<div class="poster" id="'+movieId+'">';
+                  html1 += '<img title="'+title+overview+'" alt="'+title+'" src='+imageSource+'>'
+               html1 += '</div>';
 
-            var html1 = '<div class="poster" id="'+movieId+'">';
-                   html1 += '<img title="'+title+overview+'" alt="'+title+'" src='+imageSource+'>'
-                html1 += '</div>';
+            if(i%4 == 3){
+               html1 += '</div>';
+            }
 
             $('h2').text('Search Results');
 
-               $('#poster-wrapper').append(html1);         
+                        
          };
+            $('#poster-wrapper').append(html1);
             clickable();
       });  
    });
@@ -78,7 +85,6 @@ $(document).ready(function(){
       var html = '';
       movieArray = movie.results;
       for(i=0;i<movieArray.length;i++){
-         
          var backdropPath = movieArray[i].backdrop_path;
          var genreIds = movieArray[i].genre_ids;
          var movieId = movieArray[i].id;
@@ -99,18 +105,27 @@ $(document).ready(function(){
          var backdropSource = basePath+posterSize+backdropPath;
          if(backdropPath == null){
             backdropSource = 'http://www.allmystery.de/dateien/60808,1298758641,NotAvailable.jpg';
-
          }
          
-         var html = '<div class="poster" id="'+movieId+'">';
+         if(i%4 == 0){
+            html += '<div class="row">';
+
+         }
+
+
+            html += '<div class="poster" id="'+movieId+'">';
                 html += '<img title="'+movieTitle+' - '+overview+'" image="'+basePath+posterSize+backdropPath
                 html += '" alt="'+movieTitle+'" src="'+imageSource+'">'
              html += '</div>';
-
+         if(i%4 == 3){
+            html += '</div>';
+            console.log(i);
+         }
          
-            $('#poster-wrapper').append(html);
+            
             
       }
+      $('#poster-wrapper').append(html);
       clickable();
 
    })
